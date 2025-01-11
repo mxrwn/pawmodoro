@@ -3,7 +3,7 @@
     <h1>Pawmodoro</h1>
     <h2>{{ minutes.value }} : {{ seconds.value }}</h2>
     <button v-if="!time.play" @click="startTimer()">Play</button>
-    <button v-if="time.play" @click="stopTimer()">Pause</button>
+    <button v-if="time.play" @click="pauseTimer()">Pause</button>
   </div>
 </template>
 <script lang="ts">
@@ -12,25 +12,30 @@ import { defineComponent, reactive, ref, watchEffect } from "vue";
 export default defineComponent({
   name: "HomeView",
   setup() {
-    let time = ref({ v: 70, play: false });
+    let time = ref({ v: 5, play: false });
 
     const minutes = reactive({ value: Math.floor(time.value.v / 60) });
     const seconds = reactive({ value: time.value.v - minutes.value * 60 });
     const timerManager = () => {
+      time.value.play = true;
       const timer = setInterval(() => {
         if (time.value.v > 0 && time.value.play) {
           time.value.v -= 1;
         }
+        if (time.value.v === 0) {
+          pauseTimer();
+          time.value.v = 5;
+        }
       }, 1000);
       return timer;
     };
-    const timing = timerManager();
+    let timing: any = null;
 
     const startTimer = () => {
-      time.value.play = true;
+      timing = timerManager();
     };
 
-    const stopTimer = () => {
+    const pauseTimer = () => {
       time.value.play = false;
       clearInterval(timing);
     };
@@ -38,8 +43,6 @@ export default defineComponent({
     watchEffect(() => {
       minutes.value = Math.floor(time.value.v / 60);
       seconds.value = time.value.v - minutes.value * 60;
-
-      console.log(time.value.play);
     });
 
     return {
@@ -47,7 +50,7 @@ export default defineComponent({
       minutes,
       seconds,
       startTimer,
-      stopTimer,
+      pauseTimer,
     };
   },
 });
