@@ -5,11 +5,14 @@
     <button v-if="!time.play" @click="startTimer()">Play</button>
     <button v-if="time.play" @click="pauseTimer()">Pause</button>
   </div>
+  <single-task />
 </template>
 <script lang="ts">
+import SingleTask from "@/components/SingleTask.vue";
 import { defineComponent, reactive, ref, watchEffect } from "vue";
 
 export default defineComponent({
+  components: { SingleTask },
   name: "HomeView",
   setup() {
     let time = ref({ v: 5, play: false });
