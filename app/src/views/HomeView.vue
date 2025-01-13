@@ -1,18 +1,27 @@
 <template>
   <div class="home">
-    <h1>Pawmodoro</h1>
-    <h2>{{ minutes.value }} : {{ seconds.value }}</h2>
+    <h1>paw.</h1>
+    <h2>{{ minutes.value }}:{{ seconds.value }}</h2>
+    <div class="numbers">
+      <single-number />
+      <single-number />
+      <p>:</p>
+      <single-number />
+      <single-number />
+    </div>
     <button v-if="!time.play" @click="startTimer()">Play</button>
     <button v-if="time.play" @click="pauseTimer()">Pause</button>
   </div>
-  <single-task />
 </template>
 <script lang="ts">
-import SingleTask from "@/components/SingleTask.vue";
+// import SingleTask from "@/components/SingleTask.vue";
+import SingleNumber from "@/components/SingleNumber.vue";
 import { defineComponent, reactive, ref, watchEffect } from "vue";
 
 export default defineComponent({
-  components: { SingleTask },
+  components: {
+    SingleNumber,
+  },
   name: "HomeView",
   setup() {
     let time = ref({ v: 5, play: false });
@@ -58,3 +67,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss" scoped>
+.numbers {
+  display: flex;
+  width: 209px;
+  justify-content: space-between;
+}
+</style>
